@@ -8,6 +8,9 @@ import java.util.List;
  * Id class that auto-increments and generates an automated unique Id number for Doctors and Patients separately.
  */
 public class Id {
+    public static final String MESSAGE_CONSTRAINTS =
+            "ID is in an invalid format. Refer to the User Guide in the help command for more information.";
+    public static final String VALIDATION_REGEX = "\\d+";
     public static final String DOCTOR = "DOCTOR";
     private static final String PATIENT = "PATIENT";
     private static int patientIdCounter = 0;
@@ -67,6 +70,57 @@ public class Id {
                 .mapToInt(x -> x)
                 .max()
                 .orElse(0) + 2; // Increment by 2 to continue from the last used patient ID
+    }
+    public static boolean isValidId(String test) {
+        return test.matches(VALIDATION_REGEX);
+    }
+
+    /**
+     * Resets the patientIdCounter
+     */
+    public static void resetPatientIdCounter() {
+        patientIdCounter = 0;
+    }
+
+    /**
+     * Resets the doctorIdCounter
+     */
+    public static void resetDoctorIdCounter() {
+        doctorIdCounter = 1;
+    }
+
+    /**
+     * Gets the current patientIdCounter
+     */
+    public static int getCurrentPatientIdCounter() {
+        return patientIdCounter;
+    }
+
+    /**
+     * Gets the current doctorIdCounter
+     */
+    public static int getCurrentDoctorIdCounter() {
+        return doctorIdCounter;
+    }
+
+    /**
+     * Reduces the current patientIdCounter by 2
+     */
+    public static void reduceCurrentPatientIdCounter() {
+        if (patientIdCounter == 0) {
+        } else {
+            patientIdCounter = patientIdCounter - 2;
+        }
+    }
+
+    /**
+     * Reduces the current doctorIdCounter by 2
+     */
+    public static void reduceCurrentDoctorIdCounter() {
+        if (doctorIdCounter == 0) {
+        } else {
+            doctorIdCounter = doctorIdCounter - 2;
+        }
     }
 
     @Override

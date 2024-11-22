@@ -2,27 +2,26 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.Messages.MESSAGE_INVALID_ID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 
 import java.util.stream.Stream;
 
 import seedu.address.commons.exceptions.InvalidIdException;
-import seedu.address.logic.commands.DeletePatientCommand;
+import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
- * Parses input arguments and creates a new DeletePatientCommand object
+ * Parses input arguments and creates a new DeleteCommand object
  */
-public class DeletePatientCommandParser implements Parser<DeletePatientCommand> {
+public class DeleteCommandParser implements Parser<DeleteCommand> {
 
     /**
-     * Parses the given {@code String} of arguments in the context of the DeletePatientCommand
-     * and returns a DeletePatientCommand object for execution.
+     * Parses the given {@code String} of arguments in the context of the DeleteCommand
+     * and returns a DeleteCommand object for execution.
      * @throws ParseException if the user input does not conform the expected format
      */
     @Override
-    public DeletePatientCommand parse(String args) throws ParseException {
+    public DeleteCommand parse(String args) throws ParseException {
 
         requireNonNull(args);
         ArgumentMultimap argumentMultimap = ArgumentTokenizer.tokenize(args, PREFIX_ID);
@@ -30,15 +29,15 @@ public class DeletePatientCommandParser implements Parser<DeletePatientCommand> 
         if (!arePrefixesPresent(argumentMultimap, PREFIX_ID)
                 || !argumentMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    DeletePatientCommand.MESSAGE_USAGE));
+                    DeleteCommand.MESSAGE_USAGE));
         }
         int patientId;
         try {
             patientId = ParserUtil.parsePersonId(argumentMultimap.getAllValues(PREFIX_ID).get(0));
         } catch (InvalidIdException e) {
-            throw new ParseException(MESSAGE_INVALID_ID, e);
+            throw new ParseException(e.getMessage());
         }
-        return new DeletePatientCommand(patientId);
+        return new DeleteCommand(patientId);
     }
 
     /**

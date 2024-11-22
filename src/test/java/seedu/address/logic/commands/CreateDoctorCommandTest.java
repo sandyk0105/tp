@@ -12,6 +12,7 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.Messages;
@@ -85,6 +86,10 @@ public class CreateDoctorCommandTest {
         public void addPerson(Person person) {
             throw new AssertionError("This method should not be called.");
         }
+        @Override
+        public String getPersonRole(Person person) {
+            return "DOCTOR";
+        }
 
         @Override
         public void setAddressBook(ReadOnlyAddressBook newData) {
@@ -110,7 +115,10 @@ public class CreateDoctorCommandTest {
         public void setPerson(Person target, Person editedPerson) {
             throw new AssertionError("This method should not be called.");
         }
-
+        @Override
+        public ObservableList<Person> getAllPersons() {
+            throw new AssertionError("This method should not be called.");
+        }
         @Override
         public ObservableList<Person> getFilteredPersonList() {
             return null;
@@ -123,7 +131,7 @@ public class CreateDoctorCommandTest {
 
         @Override
         public Person getFilteredPersonById(ObservableList<Person> allPersons, int id) {
-            return null; // TODO?
+            return null;
         }
 
         @Override
@@ -220,6 +228,10 @@ public class CreateDoctorCommandTest {
                 }
             }
             return null;
+        }
+        @Override
+        public ObservableList<Person> getAllPersons() {
+            return FXCollections.observableArrayList(personList);
         }
         @Override
         public ObservableList<Person> getFilteredPersonList() {

@@ -7,7 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
 import java.time.LocalDate;
 
 import javafx.collections.ObservableList;
-import seedu.address.commons.core.Messages;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -17,18 +17,20 @@ import seedu.address.model.person.Person;
  */
 public class CheckAppointmentCommand extends Command {
 
-    public static final String COMMAND_WORD = "checkAppointment";
+    public static final String COMMAND_WORD = "checkA";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Checks the appointments of the doctor identified "
-            + "by the doctor ID. "
-            + "Parameters: DOCTOR_ID (must be a valid ID) "
-            + "LOCAL_DATETIME \n"
-            + "Example: " + COMMAND_WORD + " " + PREFIX_ID + " 01" + PREFIX_DAY_DATE + " 2023-09-25";
+    public static final String MESSAGE_USAGE = COMMAND_WORD
+            + ": Checks the appointments of the patient/doctor identified  "
+            + "based on id provided. \n"
+            + COMMAND_WORD + " "
+            + PREFIX_ID + "ID "
+            + PREFIX_DAY_DATE + "DATE \n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_ID + "01 " + PREFIX_DAY_DATE + "2023-09-25";
 
-    public static final String MESSAGE_CHECK_APPOINTMENT_SUCCESS = "Checked appointment for Doctor: %1$s on %2$s";
-    public static final String MESSAGE_NO_APPOINTMENT_FOUND = "No appointment found for Doctor: %1$s on %2$s";
 
-    public static final String MESSAGE_NO_DATE_TIME = "No date time is given for Doctor appointment: %1$s on %2$s";
+    public static final String MESSAGE_NO_APPOINTMENT_FOUND = "No appointment found for the person: %s";
+
+    public static final String MESSAGE_NO_DATE_TIME = "No date time is given for appointment: %s";
 
     private final int doctorId;
     private final LocalDate date;
@@ -38,7 +40,7 @@ public class CheckAppointmentCommand extends Command {
      * @param date the specific date and time of the appointment to check (optional)
      */
     public CheckAppointmentCommand(int doctorId, LocalDate date) {
-        requireNonNull(doctorId); // Only patientId is mandatory
+        requireNonNull(doctorId);
         this.doctorId = doctorId;
         this.date = date;
     }
@@ -47,12 +49,11 @@ public class CheckAppointmentCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
 
         requireNonNull(model);
-        ObservableList<Person> allPersons = model.getFilteredPersonList();
+        ObservableList<Person> allPersons = model.getAllPersons();
         Person doctorToCheckAppointment = model.getFilteredDoctorById(allPersons, doctorId);
 
         if (doctorToCheckAppointment == null) {
-            // Throw an exception if the doctor is not found
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(Messages.MESSAGE_INVALID_ID);
         }
 
         if (date == null) {
